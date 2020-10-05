@@ -116,7 +116,9 @@
             </div>
 
             <div class="filters-toolbar__item filters-toolbar__item--count">
-              <span class="filters-toolbar__product-count">{{ 'collections.general.items_with_count' | t: count: collection.products_count }}</span>
+              {% for tag in collection.all_tags %}
+                <a data-filter-tag="{{ tag | handle }}">{{ tag }}</a>
+              {% endfor %}
             </div>
           </div>
         </div>
@@ -137,11 +139,11 @@
         {%- assign grid_item_width = 'small--one-half medium-up--one-fifth' -%}
       {% endcase %}
 
-      <ul class="grid grid--uniform{% if collection.products_count > 0 %} grid--view-items{% endif %}">
+      <div class="grid grid--uniform{% if collection.products_count > 0 %} grid--view-items{% endif %}">
         {% for product in collection.products %}
-          <li class="grid__item grid__item--{{section.id}} {{ grid_item_width }}">
+          <div class="grid__item grid__item--{{section.id}} {{ grid_item_width }}" data-filter-tags="{{ product.tags }}">
             {% include 'product-card-grid', max_height: max_height, product: product, show_vendor: section.settings.show_vendor %}
-          </li>
+          </div>
         {% else %}
           {% comment %}
           Add default products to help with onboarding for collections/all only.
@@ -174,7 +176,10 @@
             {%- assign is_empty_collection = true -%}
           {% endif %}
         {% endfor %}
-      </ul>
+        {%- if paginate.pages > 1 -%}
+          <a style="float:left;width:100%;" data-load-more href="{{ paginate.next.url }}&view=ajax">...</a>
+        {%- endif -%}
+      </div>
     {% else %}
       <ul class="list-view-items">
         {% for product in collection.products %}
@@ -225,9 +230,6 @@
       </div>
     {% endif %}
 
-    {%- if paginate.pages > 1 -%}
-      {% include 'pagination', paginate: paginate %}
-    {%- endif -%}
   </div>
 </div>
 

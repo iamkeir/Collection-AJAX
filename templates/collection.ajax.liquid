@@ -1,0 +1,13 @@
+{% layout none %}
+
+{% paginate collection.products by 8 %}
+
+    {% for product in collection.products %}
+      <div class="grid__item grid__item--4 small--one-half medium-up--one-quarter" data-filter-tags="{{ product.tags }}">
+        {% include 'product-card-grid', max_height: 250, product: product, show_vendor: section.settings.show_vendor %}
+      </div>
+    {% endfor %}
+
+
+  <a style="float:left;width:100%;" data-load-more href="{{ paginate.next.url }}&view=ajax">...</a>
+{% endpaginate %}

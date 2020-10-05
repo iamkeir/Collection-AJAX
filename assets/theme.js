@@ -9320,3 +9320,50 @@ function removeImageLoadingAnimation(image) {
     imageWrapper.removeAttribute('data-image-loading-animation');
   }
 }
+
+
+// yeah
+
+let loadMoreTrigger = document.querySelector('[data-load-more]');
+let filterTrigger = document.querySelector('[data-filter-tag]');
+let filterValue;
+
+function addNewProducts(html, target) {
+  let t = document.createElement('div');
+  t.innerHTML = html;
+  target.replaceWith(t);
+
+  if (filterValue) { filterProducts(filterValue); }
+}
+
+function filterProducts(filter) {
+  let tags;
+
+  for (let elem of document.querySelectorAll('.grid__item')) {
+    tags = elem.getAttribute('data-filter-tags') || '';
+    if (!tags.includes(filter)) {
+      elem.style.display = 'none';
+    }
+  }
+}
+
+let observer = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.intersectionRatio > 0) {
+      fetch(entry.target.href)
+        .then(res => res.text())
+        .then(data => addNewProducts(data, entry.target))
+        .then(observer.disconnect());
+    }
+  });
+});
+
+observer.observe(loadMoreTrigger);
+
+filterTrigger.addEventListener('click', (event) => {
+  event.preventDefault();
+  filterValue = event.target.getAttribute('data-filter-tag');
+  filterProducts(filterValue);
+});
+
+
