@@ -1,0 +1,31 @@
+# Use this to deploy to release themes
+RELEASE:
+  password:
+  theme_id:
+  store: your-store.myshopify.com
+  readonly: true # Comment out to deploy
+  ignore_files:
+    # Ignore admin-changeable data to keep it safe
+    # - settings_data.json
+    # - locales/*
+
+feature-example:
+  password:
+  theme_id:
+  store: your-store.myshopify.com
+  # readonly: true
+  ignore_files:
+    # Ignore admin-changeable data to keep it safe
+    # - settings_data.json
+    # - locales/*
+
+# !!!ONLY IN EMERGENCY!!! - Use this for priority hotfix
+LIVE:
+  password:
+  theme_id: "live"
+  store: your-store.myshopify.com
+  readonly: true # Comment out to deploy
+  ignore_files:
+    # Ignore admin-changeable data to keep it safe
+    # - settings_data.json
+    # - locales/*
